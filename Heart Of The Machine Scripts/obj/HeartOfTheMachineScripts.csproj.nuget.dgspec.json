@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
+        "projectName": "HeartOfTheMachineScripts",
+        "projectPath": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
+        "packagesPath": "C:\\Users\\ameli\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\ameli\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.bepinex.dev/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "default"
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "BepInEx.Analyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "BepInEx.Core": {
+              "target": "Package",
+              "version": "[5.*, )"
+            },
+            "BepInEx.PluginInfoProps": {
+              "target": "Package",
+              "version": "[1.*, )"
+            },
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.2, )"
+            },
+            "UnityEngine.Modules": {
+              "include": "Compile",
+              "target": "Package",
+              "version": "[2019.4.40, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

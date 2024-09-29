@@ -1,0 +1,16 @@
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Heart_Of_The_Machine_Scripts.deps.json
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Heart_Of_The_Machine_Scripts.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Heart_Of_The_Machine_Scripts.pdb
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Assembly-CSharp.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Unity.Addressables.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\Unity.ResourceManager.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\netstandard2.0\UnityEngine.UI.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.csproj.AssemblyReference.cache
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\PluginInfo.cs
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.AssemblyInfoInputs.cache
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.AssemblyInfo.cs
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.csproj.CoreCompileInputs.cache
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart Of The Machine Scripts.csproj.CopyComplete
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart_Of_The_Machine_Scripts.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\netstandard2.0\Heart_Of_The_Machine_Scripts.pdb
