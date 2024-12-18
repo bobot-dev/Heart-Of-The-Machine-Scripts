@@ -42,15 +42,6 @@ namespace HeartOfTheMachineScripts
 
         public float GetLocationCritDamageMultiplier(string location)
         {
-            // if (string.IsNullOrEmpty(location))
-            //     return 0f;
-            //
-            // if (location == "Head")
-            //     return 1f;
-            //
-            // if (location == "Limb" || location == "EndLimb")
-            //     return 0.5f;
-
             return 0f;
         }
 
@@ -61,21 +52,23 @@ namespace HeartOfTheMachineScripts
         {
             Patcher.QueryInstance();
 
-            _vc = EnemyCooldowns.Instance;
+            
             _renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
 
-            //_eyes = GetComponentsInChildren<Transform>().Where(x => x.name.ToLower().Contains("eye") && !x.name.ToLower().Contains("end")).ToArray();
-            //_chains = GetComponentsInChildren<Rigidbody>().Where(x => x.name.ToLower().Contains("chain") && !x.name.ToLower().Contains("end")).ToArray();
             _block = new MaterialPropertyBlock();
+
+            _oc = OverseerCooldowns.Instance;
+
+            if (!chargeParticle)
+            {
+                chargeParticle = GetComponentInChildren<ParticleSystem>();
+            }
         }
 
         private void Start()
         {
             _bsm = BloodsplatterManager.Instance;
-            if (!chargeParticle)
-            {
-                chargeParticle = GetComponentInChildren<ParticleSystem>();
-            }
+
 
             //components.Animator = GetComponent<Animator>();
 
@@ -102,13 +95,6 @@ namespace HeartOfTheMachineScripts
             }
             _difficulty = Components.EnemyIdentifier.difficultyOverride >= 0 ? Components.EnemyIdentifier.difficultyOverride : PrefsManager.Instance.GetInt("difficulty");
 
-            switch (_difficulty)
-            {
-                default: _attackLimit = 2; break;
-                case 2: _attackLimit = 3; break;
-                case 3: _attackLimit = 4; break;
-                case >= 4: _attackLimit = 5; break;
-            }
 
             switch (_difficulty)
             {
@@ -124,6 +110,7 @@ namespace HeartOfTheMachineScripts
                 knockbackIndicator.gameObject.SetActive(false);
             }
 
+            _knockbackCooldown = 1.5f;
         }
 
         private void UpdateBuff()
@@ -145,6 +132,11 @@ namespace HeartOfTheMachineScripts
                     instance.PlayCleanMusic();
                 }
             }
+
+            if (_oc)
+            {
+                _oc.RemoveOverseer(this);
+            }
         }
 
         private void OnEnable()
@@ -153,6 +145,11 @@ namespace HeartOfTheMachineScripts
             {
                 musicRequested = true;
                 MusicManager.Instance.PlayBattleMusic();
+            }
+
+            if (_oc)
+            {
+                _oc.AddOverseer(this);
             }
         }
 
@@ -185,7 +182,7 @@ namespace HeartOfTheMachineScripts
                 if (targetSpotted)
                 {
                     _viewTarget = Target.position;
-                    var num = (float)(_difficulty / 2);
+                    var num = (_difficulty / 2f);
                     if (num == 0f)
                     {
                         num = 0.25f;
@@ -230,7 +227,7 @@ namespace HeartOfTheMachineScripts
 
                 if ((!Target.isPlayer || !NewMovement.Instance.levelOver) &&  (Vector3.Distance(transform.position, Target.position) < 150f || stationary))
                 {
-                    float difficultyCooldown = _difficulty / 2;
+                    float difficultyCooldown = _difficulty / 2f;
                     switch (_difficulty)
                     {
                         case >= 4:
@@ -249,18 +246,18 @@ namespace HeartOfTheMachineScripts
                     {
                         _attackCooldown = Mathf.MoveTowards(_attackCooldown, 0f, Time.deltaTime * difficultyCooldown);
                     }
-                    else if (Components.Insignia != null)// && (!_vc || _vc.virtueCooldown == 0f))
+                    else if (Components.Insignia != null && (!_oc || _oc.overseerCooldown == 0f))
                     {
-                        if (_vc)
+                        if (_oc)
                         {
-                            _vc.virtueCooldown = 1f / Components.EnemyIdentifier.totalSpeedModifier;
+                            _oc.overseerCooldown = 1f / Components.EnemyIdentifier.totalSpeedModifier;
                         }
 
                         _parryable = true;
 
                         chargeParticle?.Play();
-                        PlaySound(Components.WindUpSound, Mathf.Lerp(0.8f, 1.2f, _usedAttacks > 0 ? ((float)_usedAttacks) / _attackLimit : 0));
-                        _attackCooldown = Mathf.Max(1f, (3f - _usedAttacks) / (enraged ? 2 : 1));
+                        PlaySound(Components.WindUpSound, Mathf.Lerp(0.8f, 1.2f, _oc.overseerUsedBeams > 0 ? ((float)_oc.overseerUsedBeams) / _oc.GetMaxAttackAmount(_difficulty) : 0));
+                        _attackCooldown = Mathf.Max(1f, (3f - _oc.overseerUsedBeams) / (enraged ? 2 : 1));
                         Components.Animator?.SetTrigger("Attack");
                         Components.PassiveAudioSource.pitch = 0.75f;
                     }
@@ -827,7 +824,7 @@ namespace HeartOfTheMachineScripts
 
                 case "Limb":
                 case "EndLimb":
-                    return GoreType.Limb;
+                    return GoreType.Small;
 
                 default:
                     return GoreType.Small;
@@ -918,18 +915,6 @@ namespace HeartOfTheMachineScripts
                     }
                 }
 
-                var amount = Components.GasolineProjectileAmount + Random.Range(-Components.GasolineProjectileAmountVariance, Components.GasolineProjectileAmountVariance);
-
-                for (int i = 0; i < amount; i++)
-                {
-                    var gasolineObj = Instantiate(Components.GasolineProjectile, transform.position, Random.rotation);
-                    gasolineObj.SetActive(true);
-                    if (gasolineObj.TryGetComponent(out Rigidbody rigidbody))
-                    {
-                        rigidbody.AddForce(gasolineObj.transform.forward * Random.Range(10f, 20f), ForceMode.Impulse);
-                    }
-                }
-
                 var componentInChildren = GetComponentInChildren<DoubleRender>();
                 if (componentInChildren)
                 {
@@ -981,6 +966,8 @@ namespace HeartOfTheMachineScripts
                 return;
             }
 
+            knockbackIndicator?.gameObject.SetActive(false);
+
             Components.UnlockSetter?.SetVar();
             Components.KillCount?.SetVar();
 
@@ -1027,16 +1014,26 @@ namespace HeartOfTheMachineScripts
             Components.Rigidbody.velocity = Vector3.zero;
             Components.Rigidbody.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
             Components.Rigidbody.useGravity = true;
-            if (insignias.Count > 0)
+
+            if (_oc)
             {
-                for (var i = 0; i < insignias.Count; i++)
+                _oc.RemoveOverseer(this);
+            }
+
+
+            if (_oc.insignias.Count > 0 && _oc.currentOverseers.Count <= 0)
+            {
+                for (var i = 0; i < _oc.insignias.Count; i++)
                 {
-                    if (insignias[i] != null && insignias[i].gameObject)
+                    if (_oc.insignias[i] != null && _oc.insignias[i].gameObject)
                     {
-                        insignias[i].Invoke("Activating", i * 0.5f / insignias[i].windUpSpeedMultiplier);
-                        //Destroy(insignias[i].gameObject);
+                        _oc.insignias[i].explosionLength = 0.5f;
+                        _oc.insignias[i].Invoke("Activating", i * 0.5f / _oc.insignias[i].windUpSpeedMultiplier);
+
                     }
                 }
+                _oc.insignias.Clear();
+                _oc.overseerUsedBeams = 0;
             }
 
             if (Components.EnemyIdentifier.hitter != "enemy")
@@ -1103,12 +1100,9 @@ namespace HeartOfTheMachineScripts
 
 
 
-                insignias.Add(overseerInsignia);
+                _oc.insignias.Add(overseerInsignia);
 
-                if (insignias.Count > 1)
-                {
-                    //insignias[_usedAttacks - 1].noTracking = true;
-                }
+        
 
                 chargeParticle.Stop(false, ParticleSystemStopBehavior.StopEmitting);
                 if (enraged)
@@ -1122,21 +1116,26 @@ namespace HeartOfTheMachineScripts
                 {
                     case 0:
                     case 1:
+                        overseerInsignia.explosionLength = 1.5f;
+                        insigniaObj.transform.localScale *= 0.75f;
+                        break;
+
                     case 2:
-                        overseerInsignia.explosionLength = 1;
-                        break;
                     case 3:
-                        overseerInsignia.explosionLength = 2;
+                        overseerInsignia.explosionLength = 2f;
+                        insigniaObj.transform.localScale *= 1f;
                         break;
+
                     case 4:
-                        overseerInsignia.explosionLength = 3;
+                        overseerInsignia.explosionLength = 2.5f;
+                        insigniaObj.transform.localScale *= 1.25f;
                         break;
+
                     case 5:
-                        overseerInsignia.explosionLength = 4;
+                        overseerInsignia.explosionLength = 3f;
+                        insigniaObj.transform.localScale *= 1.25f;
                         break;
                 }
-                
-                
 
                 if (PlayerTracker.Instance.playerType == PlayerType.Platformer)
                 {
@@ -1146,9 +1145,12 @@ namespace HeartOfTheMachineScripts
 
                 overseerInsignia.windUpSpeedMultiplier *= Components.EnemyIdentifier.totalSpeedModifier;
                 overseerInsignia.damage = Mathf.RoundToInt(overseerInsignia.damage * Components.EnemyIdentifier.totalDamageModifier);
-                _usedAttacks++;
+                //_usedAttacks++;
 
-                if (_usedAttacks >= _attackLimit)
+                _oc.overseerUsedBeams++;
+
+                //if (_usedAttacks >= _oc.GetMaxAttackAmount(_difficulty))
+                if (_oc.overseerUsedBeams >= _oc.GetMaxAttackAmount(_difficulty))
                 {
                     PlaySound(Components.ReadyBeamsSound);
                     Components.Animator?.SetTrigger("WhateverGoByInsignias");
@@ -1166,15 +1168,16 @@ namespace HeartOfTheMachineScripts
                 eyeParticleSystem.Emit(5);
             }
 
-            for (var i = 0; i < insignias.Count; i++)
+            for (var i = 0; i < _oc.insignias.Count; i++)
             {
                 //insignias[i].noTracking = true;
-                insignias[i].Invoke("Activating", (0.25f + i / 2f) / insignias[i].windUpSpeedMultiplier);
-            }
-            insignias.Clear();
 
-            
-            _usedAttacks = 0;
+                _oc.insignias[i].Invoke("Activating", (0.25f + i / 2f) / _oc.insignias[i].windUpSpeedMultiplier);
+            }
+            _oc.insignias.Clear();
+
+
+            _oc.overseerUsedBeams = 0;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -1385,10 +1388,9 @@ namespace HeartOfTheMachineScripts
         [HideInInspector] public bool musicRequested;
 
         private int _difficulty;
-        private int _usedAttacks;
+        //private int _usedAttacks;
         //[HideInInspector] public List<OverseerInsignia> childVi = new List<OverseerInsignia>();
-        [HideInInspector] public List<OverseerInsignia> insignias = new List<OverseerInsignia>();
-        private EnemyCooldowns _vc;
+        //[HideInInspector] public List<OverseerInsignia> insignias = new List<OverseerInsignia>();
 
         private bool _checkingForCrash;
 
@@ -1407,6 +1409,8 @@ namespace HeartOfTheMachineScripts
         private AlterOption<bool>[] _options;
 
         private AlterOption<float>[] _options1;
+
+        private OverseerCooldowns _oc;
         //private Drone _drone;
 
         public string alterKey => "overseer";

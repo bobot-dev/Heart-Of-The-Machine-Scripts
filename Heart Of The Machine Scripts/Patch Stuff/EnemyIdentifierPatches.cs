@@ -285,7 +285,7 @@ namespace HeartOfTheMachineScripts
             return true;
         }
 
-        [HarmonyPatch("Start"), HarmonyPrefix]
+        [HarmonyPatch("Start"), HarmonyPostfix]
         private static void StartPatch(EnemyIdentifier __instance)
         {
             if (__instance.TryGetComponent(out TitanBloodBuff titanBlood))
@@ -297,12 +297,39 @@ namespace HeartOfTheMachineScripts
                         MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
                         renderer.GetPropertyBlock(materialPropertyBlock);
                         materialPropertyBlock.SetFloat(EnemyIdentifier.HasSandBuff, 1f);
+                        if (StaticRefs.sandTexture)
+                        {
+                            StaticRefs.sandTexture = materialPropertyBlock.GetTexture(Shader.PropertyToID("_SandTex"));
+                        }
                         materialPropertyBlock.SetTexture(Shader.PropertyToID("_SandTex"), StaticRefs.Instance.titanBloodTexture);
                         renderer.SetPropertyBlock(materialPropertyBlock);
                     }
                 }
             }
         }
+
+        [HarmonyPatch("Sandify"), HarmonyPrefix]
+        private static void SandifyPatch(EnemyIdentifier __instance)
+        {
+            if (!__instance.dead && __instance.TryGetComponent<TitanBloodBuff>(out var buff))
+            {
+                foreach (Renderer renderer in __instance.GetComponentsInChildren<Renderer>())
+                {
+                    if (!__instance.buffUnaffectedRenderers.Contains(renderer))
+                    {
+                        MaterialPropertyBlock materialPropertyBlock = new MaterialPropertyBlock();
+                        renderer.GetPropertyBlock(materialPropertyBlock);
+                        if (StaticRefs.sandTexture)
+                        {
+                            materialPropertyBlock.SetTexture(Shader.PropertyToID("_SandTex"), StaticRefs.sandTexture);
+                        }
+                        renderer.SetPropertyBlock(materialPropertyBlock);
+                    }
+                }
+                UnityEngine.Object.Destroy(buff);
+            }
+        }
+
 
         [HarmonyPatch(nameof(EnemyIdentifier.UpdateModifiers)), HarmonyPostfix]
         private static void UpdateModifiersPatch(EnemyIdentifier __instance)

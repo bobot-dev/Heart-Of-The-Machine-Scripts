@@ -17,3 +17,4 @@ C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Sc
 C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\net472\HeartOfTheMachineScripts.pdb
 C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\net472\Unity.TextMeshPro.dll
 C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\bin\Debug\net472\Unity.Mathematics.dll
+C:\Users\ameli\source\repos\Heart Of The Machine Scripts\Heart Of The Machine Scripts\obj\Debug\net472\HeartOfTheMachineScripts.sourcelink.json

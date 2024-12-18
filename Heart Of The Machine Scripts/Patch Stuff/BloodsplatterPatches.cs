@@ -11,10 +11,11 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using UnityEngine.Rendering;
 using UnityEngine.ProBuilder;
+using Random = UnityEngine.Random;
 
 namespace HeartOfTheMachineScripts
 {
-    [HarmonyPatch(typeof(Bloodsplatter))]
+    //[HarmonyPatch(typeof(Bloodsplatter))]
     public static class BloodsplatterPatches
     {
         [HarmonyPatch(nameof(Bloodsplatter.Collide)), HarmonyTranspiler]
@@ -143,16 +144,64 @@ namespace HeartOfTheMachineScripts
             instructionsToInsert = new List<CodeInstruction>
             {
                 new CodeInstruction(OpCodes.Ldarg_0) {labels = new List<Label> {overrideLabel}, blocks = new List<ExceptionBlock>()},
+                new CodeInstruction(OpCodes.Ldloc_S, 2),
                 new CodeInstruction(OpCodes.Ldloc_S, 8),
                 new CodeInstruction(OpCodes.Ldloc_S, 7),
-                new CodeInstruction(Transpilers.EmitDelegate<Func<Bloodsplatter, Vector3, Vector3, bool>>(
-                    delegate(Bloodsplatter bloodsplatter, Vector3 v, Vector3 normal)
+                new CodeInstruction(Transpilers.EmitDelegate<Func<Bloodsplatter, GameObject, Vector3, Vector3, bool>>(
+                    delegate(Bloodsplatter bloodsplatter, GameObject other, Vector3 v, Vector3 normal)
                     {
 
-                        return false;
-                        if (bloodsplatter.GetComponent<TitanBloodSplatter>())
+                        
+                        if (bloodsplatter.TryGetComponent(out TitanBloodSplatter titanBlood))
                         {
                             StaticRefs.Instance.CreateIchorBloodstain(v, normal);
+
+                            float chance = bloodsplatter.bsm.GetBloodstainChance();
+                            chance = (bloodsplatter.halfChance ? (chance / 2f) : chance);
+
+                            if (Random.Range(0, 100) < chance)
+                            {
+                                if (!bloodsplatter.gz)
+                                {
+                                    bloodsplatter.gz = GoreZone.ResolveGoreZone(bloodsplatter.transform);
+                                }
+                                titanBlood.bldstn = Object.Instantiate(StaticRefs.Instance.bloodStain, v, bloodsplatter.transform.rotation);
+                                titanBlood.bldstn.transform.forward = normal * -1f;
+                                bloodsplatter.mr = titanBlood.bldstn.GetComponent<MeshRenderer>();
+                                bloodsplatter.mr.GetPropertyBlock(bloodsplatter.propertyBlock);
+                                bloodsplatter.propertyBlock.SetFloat("_Index", Random.Range(0, 5));
+                                bloodsplatter.mr.SetPropertyBlock(bloodsplatter.propertyBlock);
+                                titanBlood.bldstn.transform.Rotate(Vector3.forward * Random.Range(0, 359), Space.Self);
+                                if (other.gameObject.CompareTag("Moving") || (ComponentsDatabase.Instance && ComponentsDatabase.Instance.scrollers.Contains(other.transform)))
+                                {
+                                    titanBlood.bldstn.transform.SetParent(other.transform, true);
+                                    if (bloodsplatter.gz != null)
+                                    {
+                                        bloodsplatter.gz.outsideGore.Add(titanBlood.bldstn);
+                                    }
+
+                                    if (ComponentsDatabase.Instance && ComponentsDatabase.Instance.scrollers.Contains(other.transform) && other.transform.TryGetComponent<ScrollingTexture>(out var scrollingTexture))
+                                    {
+                                        scrollingTexture.attachedObjects.Add(titanBlood.bldstn.transform);
+                                        return true;
+                                    }
+                                }
+                                else
+                                {
+                                    if (other.gameObject.CompareTag("Glass") || other.gameObject.CompareTag("GlassFloor"))
+                                    {
+                                        titanBlood.bldstn.transform.SetParent(other.transform, true);
+                                        return true;
+                                    }
+                                    if (bloodsplatter.gz)
+                                    {
+                                        titanBlood.bldstn.transform.SetParent(bloodsplatter.gz.goreZone, true);
+                                        return true;
+                                    }
+                                    titanBlood.bldstn.transform.SetParent(bloodsplatter.transform.parent, true);
+                                    return true;
+                                }
+                            }
 
                             return true;
                         }
@@ -208,7 +257,7 @@ namespace HeartOfTheMachineScripts
             }
         }
 
-        [HarmonyPatch(nameof(BloodsplatterManager.LateUpdate)), HarmonyPostfix]
+        //[HarmonyPatch(nameof(BloodsplatterManager.LateUpdate)), HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void PatchLateUpdate(BloodsplatterManager __instance)
         {

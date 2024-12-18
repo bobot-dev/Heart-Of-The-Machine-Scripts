@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +38,25 @@ namespace HeartOfTheMachineScripts
             UpdateDisplay();
         }
 
-        
+        private void Start()
+        {
+            UpdateKnownCodeDisplay();
+            ReadableCode.codeFound += UpdateKnownCodeDisplay;
+        }
+
+        private void OnDestroy()
+        {
+            ReadableCode.codeFound -= UpdateKnownCodeDisplay;
+        }
+
+        private void UpdateKnownCodeDisplay()
+        {
+            bool valueOrDefault = MapVarManager.Instance.GetBool(ReadableCode.codePrefix + code).GetValueOrDefault();
+            _knownCodeText = knownCodeDisplay.GetComponentInChildren<TMP_Text>();
+            _knownCodeText.text = code;
+            knownCodeDisplay.SetActive(valueOrDefault);
+        }
+
 
         public void InputDigit(int digit)
         {
@@ -167,6 +186,10 @@ namespace HeartOfTheMachineScripts
                 }
             }
         }
+
+
+        private TMP_Text _knownCodeText;
+        public GameObject knownCodeDisplay;
 
         public Button checkButton;
         public Button clearButton;

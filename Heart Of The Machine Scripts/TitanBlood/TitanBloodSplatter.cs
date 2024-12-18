@@ -14,6 +14,7 @@ namespace HeartOfTheMachineScripts.TitanBlood
 
         public Color origStartColour;
         public Color origEndColour;
+        public GameObject bldstn;
 
         private void Start()
         {

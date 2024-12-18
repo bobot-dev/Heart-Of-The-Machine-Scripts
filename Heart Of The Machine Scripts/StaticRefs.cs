@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,8 +13,13 @@ namespace HeartOfTheMachineScripts
     [ConfigureSingleton(SingletonFlags.NoAutoInstance)]
     public class StaticRefs : MonoSingleton<StaticRefs>
     {
+        public TMP_StyleSheet styleSheet;
+
         public Texture2D titanBloodTexture;
         public Material ichorBloodStain;
+
+        public Material frozenMaterial;
+        public GameObject shatterVFX;
 
         public Bounds ichorBloodstainBounds;
         public NativeArray<BloodsplatterManager.InstanceProperties> ichorProps;
@@ -21,6 +27,16 @@ namespace HeartOfTheMachineScripts
         public NativeArray<float4x4> ichorParents;
         private int ichorPropIndex;
         public ComputeBuffer ichorInstanceBuffer;
+        public GameObject bloodStain;
+        public static Texture sandTexture;
+
+        public static int plushiesKilled;
+
+        public static bool bobotKilled;
+        public static bool dzKilled;
+        public static bool oxbloodKilled;
+        public static bool bobilkaKilled;
+
 
         public override void Awake()
         {

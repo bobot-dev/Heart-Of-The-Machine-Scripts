@@ -70,7 +70,8 @@ namespace HeartOfTheMachineScripts
 
             mainRenderer.GetPropertyBlock(_block, 0);
             _gz = GoreZone.ResolveGoreZone(transform);
-            _animator.Play(animation);
+            _animator.SetTrigger(animation);
+            _animator.SetTrigger(animation);
 
 
             _animator.SetLayerWeight(1, moving ? 1 : 0);
@@ -84,6 +85,13 @@ namespace HeartOfTheMachineScripts
                 enemyInfoPage.UpdateInfo();
                 enemyInfoPage.DisplayInfo();
             }
+        }
+
+        private void OnEnable()
+        {
+            _animator.SetLayerWeight(1, (moving ? 1 : 0));
+            _animator.SetTrigger(animation);
+            _animator.SetTrigger(animation);
         }
 
         private void Update()
@@ -304,6 +312,12 @@ namespace HeartOfTheMachineScripts
                 hat.AddForce((hat.position - _eid.overrideCenter.transform.position).normalized * Random.Range(20f, 30f), ForceMode.VelocityChange);
                 hat.AddTorque(Random.onUnitSphere * 360f, ForceMode.VelocityChange);
                 
+            }
+
+
+            foreach (var disableOnWorkerAnim in _toDisable)
+            {
+                disableOnWorkerAnim.gameObject.SetActive(false);
             }
 
             WorkerGoLimp();
