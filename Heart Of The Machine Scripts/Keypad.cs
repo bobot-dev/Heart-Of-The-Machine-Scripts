@@ -12,6 +12,7 @@ using UnityEngine.UI;
 
 namespace HeartOfTheMachineScripts
 {
+    [DefaultExecutionOrder(-300)]
     public class Keypad : MonoBehaviour
     {
         private void Awake()

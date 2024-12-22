@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("UItrakill project template")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa1cecb4e8568a7ef9f6baade3f2401d038c840e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("HeartOfTheMachineScripts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HeartOfTheMachineScripts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

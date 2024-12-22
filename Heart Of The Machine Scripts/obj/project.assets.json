@@ -932,19 +932,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ameli\\.nuget\\packages\\": {}
+    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
+      "projectUniqueName": "D:\\source\\repos\\Heart-Of-The-Machine-Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
       "projectName": "HeartOfTheMachineScripts",
-      "projectPath": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
-      "packagesPath": "C:\\Users\\ameli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ameli\\source\\repos\\Heart Of The Machine Scripts\\Heart Of The Machine Scripts\\obj\\",
+      "projectPath": "D:\\source\\repos\\Heart-Of-The-Machine-Scripts\\Heart Of The Machine Scripts\\HeartOfTheMachineScripts.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "D:\\source\\repos\\Heart-Of-The-Machine-Scripts\\Heart Of The Machine Scripts\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\ameli\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -965,9 +969,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "default"
       }
     },
     "frameworks": {
@@ -998,7 +999,7 @@
             "version": "[2019.4.40, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   }
