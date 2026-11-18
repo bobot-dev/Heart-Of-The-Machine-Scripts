@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Networking.Types;
 using UnityEngine.ProBuilder;
 using UnityEngine.UIElements;
-using static Steamworks.InventoryItem;
 
 namespace HeartOfTheMachineScripts
 {

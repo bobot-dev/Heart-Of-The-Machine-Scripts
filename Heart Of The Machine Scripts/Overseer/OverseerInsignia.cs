@@ -114,11 +114,11 @@ namespace HeartOfTheMachineScripts
                 {
                     if (i % 2 == 0)
                     {
-                        _sprites[i].transform.localPosition = Vector3.up * 3f * Mathf.Lerp(0f, (float)(i / 2 * -1), _currentDistance);
+                        _sprites[i].transform.localPosition = Vector3.up * (3f * Mathf.Lerp(0f, ((float)i / 2 * -1), _currentDistance));
                     }
                     else
                     {
-                        _sprites[i].transform.localPosition = Vector3.up * 3f * Mathf.Lerp(0f, (float)((i + 1) / 2), _currentDistance);
+                        _sprites[i].transform.localPosition = Vector3.up * (3f * Mathf.Lerp(0f, ((float)(i + 1) / 2), _currentDistance));
                     }
                 }
                 if (_activationTime >= 1f)

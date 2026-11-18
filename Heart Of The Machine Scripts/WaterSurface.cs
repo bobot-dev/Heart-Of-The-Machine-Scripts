@@ -14,6 +14,7 @@ namespace HeartOfTheMachineScripts
     {
         public Mesh mesh;
 
+        /*
         private void Start()
         {
             cb = new CommandBuffer
@@ -84,66 +85,7 @@ namespace HeartOfTheMachineScripts
             collisionDataList = new List<BloodAbsorber.CollisionData>(cbuff.count);
         }
 
-        /*
-        private IEnumerator ClearedAbsorber()
-        {
-            isCompleted = true;
-            var time = 0f;
-            while (time < 1f)
-            {
-                var value = Mathf.Lerp(0f, 0.06f, time);
-                propBlock.SetFloat("_ReflectionStrength", value);
-                var value2 = Color.Lerp(new Color(1f, 0.9f, 0.5f), Color.white, time);
-                propBlock.SetColor("_EmissiveColor", value2);
-                var value3 = Mathf.Lerp(2f, 1f, time);
-                propBlock.SetFloat("_EmissiveIntensity", value3);
-                var num = absorbers.Length;
-                for (var i = 0; i < num; i++)
-                {
-                    absorbers[i].SetPropertyBlock(propBlock);
-                }
-                time += Time.deltaTime;
-                yield return null;
-            }
-            yield break;
-        }
 
-        private void UnclearedAbsorber()
-        {
-            isCompleted = false;
-            propBlock.SetFloat("_ReflectionStrength", 0f);
-            propBlock.SetColor("_EmissiveColor", Color.white);
-            propBlock.SetFloat("_EmissiveIntensity", 1f);
-            var num = absorbers.Length;
-            for (var i = 0; i < num; i++)
-            {
-                absorbers[i].SetPropertyBlock(propBlock);
-            }
-        }*/
-
-        /*private void OnValidate()
-        {
-            if (clearBlood)
-            {
-                InitializeRTs();
-                clearBlood = false;
-            }
-            if (fillBlood)
-            {
-                Graphics.Blit(visibilityMask, bloodMap, absMat, 7);
-                fillBlood = false;
-            }
-            var num = visibilityMask.width * visibilityMask.height;
-            var num2 = 0f;
-            for (var i = 0; i < visibilityMask.width; i++)
-            {
-                for (var j = 0; j < visibilityMask.height; j++)
-                {
-                    num2 += visibilityMask.GetPixel(i, j).r;
-                }
-            }
-            maxFill = num2 / num;
-        }*/
 
         private void InitializeRTs()
         {
@@ -284,7 +226,7 @@ namespace HeartOfTheMachineScripts
             Graphics.ExecuteCommandBuffer(cb);
             Graphics.Blit(paintBuffer, bloodMap, absMat, 2);
             return true;
-        }
+        }*/
 
         public Shader absorptionShader;
 

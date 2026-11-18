@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HeartOfTheMachineScripts
 {
-    internal class ModIncompatabilityWarning
+    public class ModIncompatabilityWarning
     {
     }
 }

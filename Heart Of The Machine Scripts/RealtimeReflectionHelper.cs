@@ -8,6 +8,7 @@ using UnityEngine;
 namespace HeartOfTheMachineScripts
 {
     [RequireComponent(typeof(Camera))]
+    [ExecuteInEditMode]
     public class RealtimeReflectionHelper : MonoBehaviour
     {
         private void Awake()
@@ -19,6 +20,8 @@ namespace HeartOfTheMachineScripts
         {
             _cc = CameraController.Instance;
 
+            if (!renderTexture)
+                return;
             renderTexture.Release();
             renderTexture.width = Screen.width;
             renderTexture.height = Screen.height;

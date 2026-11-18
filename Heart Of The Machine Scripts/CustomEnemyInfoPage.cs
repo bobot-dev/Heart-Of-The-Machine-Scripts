@@ -42,7 +42,7 @@ namespace HeartOfTheMachineScripts
                         _buttonTemplateBackground.color = spawnableObject.backgroundColor;
                         _buttonTemplateForeground.sprite = spawnableObject.gridIcon;
                         _stringBuilder.stringParts[0].value = $"{spawnableObject.identifier}.kills";
-                        _stringBuilder._stringVariableName = $"{spawnableObject.identifier}.kills.output";
+                        _stringBuilder.stringVariableName = $"{spawnableObject.identifier}.kills.output";
                     }
                     else
                     {

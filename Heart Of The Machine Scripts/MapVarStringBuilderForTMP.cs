@@ -1,7 +1,8 @@
-﻿using Logic;
-using System.Text;
+﻿using System.Text;
+using Logic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace HeartOfTheMachineScripts
 {
@@ -9,7 +10,7 @@ namespace HeartOfTheMachineScripts
     {
         private void OnEnable()
         {
-            if (_buildOnEnable)
+            if (buildOnEnable)
             {
                 BuildString();
             }
@@ -17,7 +18,7 @@ namespace HeartOfTheMachineScripts
 
         private void Update()
         {
-            if (_buildOnUpdate)
+            if (buildOnUpdate)
             {
                 BuildString();
             }
@@ -25,50 +26,57 @@ namespace HeartOfTheMachineScripts
 
         public void BuildString()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (StringPart stringPart in stringParts)
+            var stringBuilder = new StringBuilder();
+            foreach (var stringPart in stringParts)
             {
                 stringBuilder.Append(stringPart.GetString());
             }
-            if (_textTarget != null)
+            if (textTarget)
             {
-                if (_textMethod == TextSetMethod.SetText)
+                switch (textMethod)
                 {
-                    _textTarget.text = stringBuilder.ToString();
-                }
-                else if (_textMethod == TextSetMethod.AppendText)
-                {
-                    TMP_Text text = _textTarget;
-                    text.text += stringBuilder.ToString();
-                }
-                else if (_textMethod == TextSetMethod.PrependText)
-                {
-                    _textTarget.text = stringBuilder + _textTarget.text;
+                    case TextSetMethod.SetText:
+                        textTarget.text = stringBuilder.ToString();
+                        break;
+                    case TextSetMethod.AppendText:
+                        {
+                            var text = textTarget;
+                            text.text += stringBuilder.ToString();
+                            break;
+                        }
+                    case TextSetMethod.PrependText:
+                        textTarget.text = stringBuilder + textTarget.text;
+                        break;
                 }
             }
-            if (!string.IsNullOrEmpty(_stringVariableName))
+            if (!string.IsNullOrEmpty(stringVariableName))
             {
-                MonoSingleton<MapVarManager>.Instance.SetString(_stringVariableName, stringBuilder.ToString(), false);
+                MonoSingleton<MapVarManager>.Instance.SetString(stringVariableName, stringBuilder.ToString(), false);
             }
         }
 
         [Header("Input")]
         public StringPart[] stringParts;
 
+        [FormerlySerializedAs("_stringVariableName")]
         [Header("Output")]
-        public string _stringVariableName;
+        public string stringVariableName;
 
+        [FormerlySerializedAs("_textMethod")]
         [SerializeField]
-        private TextSetMethod _textMethod;
+        private TextSetMethod textMethod;
 
+        [FormerlySerializedAs("_textTarget")]
         [SerializeField]
-        private TMP_Text _textTarget;
+        private TMP_Text textTarget;
 
+        [FormerlySerializedAs("_buildOnEnable")]
         [Header("Events")]
         [SerializeField]
-        private bool _buildOnEnable;
+        private bool buildOnEnable;
 
+        [FormerlySerializedAs("_buildOnUpdate")]
         [SerializeField]
-        private bool _buildOnUpdate;
+        private bool buildOnUpdate;
     }
 }

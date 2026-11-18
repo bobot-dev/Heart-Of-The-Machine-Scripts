@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using SettingsMenu.Components.Pages;
 using UnityEngine;
 using static HeartOfTheMachineScripts.Worker;
 using static UnityEngine.GraphicsBuffer;
@@ -49,7 +50,7 @@ namespace HeartOfTheMachineScripts.Workers
                     {
                         if (StockMapInfo.Instance.removeGibsWithoutAbsorbers && childJoint.TryGetComponent<EnemyIdentifierIdentifier>(out var enemyIdentifierIdentifier))
                         {
-                            enemyIdentifierIdentifier.Invoke("DestroyLimbIfNotTouchedBloodAbsorber", StockMapInfo.Instance.gibRemoveTime);
+                            enemyIdentifierIdentifier.Invoke(nameof(EnemyIdentifierIdentifier.DestroyLimbIfNotTouchedBloodAbsorber), StockMapInfo.Instance.gibRemoveTime);
                         }
 
                         Destroy(childJoint);
@@ -90,7 +91,7 @@ namespace HeartOfTheMachineScripts.Workers
                         {
                             if (StockMapInfo.Instance.removeGibsWithoutAbsorbers && childJoint.TryGetComponent<EnemyIdentifierIdentifier>(out var enemyIdentifierIdentifier))
                             {
-                                enemyIdentifierIdentifier.Invoke("DestroyLimbIfNotTouchedBloodAbsorber", StockMapInfo.Instance.gibRemoveTime);
+                                enemyIdentifierIdentifier.Invoke(nameof(EnemyIdentifierIdentifier.DestroyLimbIfNotTouchedBloodAbsorber), StockMapInfo.Instance.gibRemoveTime);
                             }
 
                             Destroy(childJoint);
@@ -109,7 +110,7 @@ namespace HeartOfTheMachineScripts.Workers
                     Destroy(GetComponent<Rigidbody>());
                 }
 
-                if (TryGetComponent<Collider>(out obj))
+                if (TryGetComponent(out obj))
                 {
                     Destroy(obj);
                 }
@@ -141,7 +142,7 @@ namespace HeartOfTheMachineScripts.Workers
         {
             tempGib.transform.SetPositionAndRotation(target.transform.position, Random.rotation);
             gz.SetGoreZone(tempGib);
-            if (!OptionsMenuToManager.bloodEnabled)
+            if (!GraphicsSettings.bloodEnabled)
             {
                 tempGib.SetActive(false);
             }

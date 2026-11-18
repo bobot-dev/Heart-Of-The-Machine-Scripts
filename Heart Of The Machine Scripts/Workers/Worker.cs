@@ -47,6 +47,8 @@ namespace HeartOfTheMachineScripts
 
         private void Awake()
         {
+            Patcher.QueryInstance();
+            
             if (!_animator) 
                 _animator = GetComponent<Animator>();
 

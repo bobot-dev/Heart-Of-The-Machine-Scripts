@@ -10,9 +10,10 @@ using Random = UnityEngine.Random;
 
 namespace HeartOfTheMachineScripts
 {
-    //[HarmonyPatch(typeof(Bloodsplatter))]
+    [HarmonyPatch(typeof(Bloodsplatter))]
     public static class BloodsplatterPatches
     {
+        /*
         [HarmonyPatch(nameof(Bloodsplatter.Collide)), HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> CollideIL(IEnumerable<CodeInstruction> instructions, ILGenerator il)
         {
@@ -253,12 +254,7 @@ namespace HeartOfTheMachineScripts
         }
 
         //[HarmonyPatch(nameof(BloodsplatterManager.LateUpdate)), HarmonyPostfix]
-        // ReSharper disable once InconsistentNaming
-        private static void PatchLateUpdate(BloodsplatterManager __instance)
-        {
-            StaticRefs.Instance.ichorParentBuffer.SetData(StaticRefs.Instance.ichorParents);
-            Graphics.DrawMeshInstancedProcedural(__instance.stainMesh, 0, StaticRefs.Instance.ichorBloodStain, __instance.bloodstainBounds,
-                StaticRefs.Instance.ichorProps.Length);
-        }
+        // ReSharper disable once InconsistentNaming*/
+
     }
 }

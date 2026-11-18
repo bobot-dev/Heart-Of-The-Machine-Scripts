@@ -24,7 +24,7 @@ namespace HeartOfTheMachineScripts.Workers
             {
                 Vector3 position = part.transform.position;
                 part.GetCollisionEvents(other, collisionEvents);
-                bloodAbsorber.ProcessWasherSpray(ref collisionEvents, position);
+                //bloodAbsorber.ProcessWasherSpray(ref collisionEvents, position);
             }
             // else if (other.TryGetComponent(out BloodAbsorberChild bloodAbsorberChild))
             // {

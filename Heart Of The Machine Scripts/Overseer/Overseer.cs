@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Sandbox;
+using SettingsMenu.Components.Pages;
 using ULTRAKILL.Cheats;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -219,7 +220,8 @@ namespace HeartOfTheMachineScripts
                     }
                 }
 
-                if (_difficulty >= 2 && _knockbackCooldown <= 0f && (Vector3.Distance(transform.position, Components.EnemyIdentifier.target.position) < 10f || Vector3.Distance(transform.position, Components.EnemyIdentifier.target.position) < knockbackDistance))
+                if (_difficulty >= 2 && _knockbackCooldown <= 0f && 
+                    (Vector3.Distance(transform.position, Components.EnemyIdentifier.target.position) < knockbackDistance))
                 {
                     DoKnockback();
                 }
@@ -314,7 +316,7 @@ namespace HeartOfTheMachineScripts
                 }
             }
 
-            Invoke("SlowUpdate", 0.25f);
+            Invoke(nameof(SlowUpdate), 0.25f);
         }
 
         /*private void LateUpdate()
@@ -471,7 +473,7 @@ namespace HeartOfTheMachineScripts
 
             if (_difficulty >= 3)
             {
-                Invoke("SpawnKnockbackBeam", 0.1f);
+                Invoke(nameof(SpawnKnockbackBeam), 0.1f);
             }
         }
 
@@ -496,17 +498,8 @@ namespace HeartOfTheMachineScripts
             overseerInsignia.target = Target;
             overseerInsignia.parentOverseer = this;
             overseerInsignia.hadParent = true;
-
-            //overseerInsignia.noTracking = true;
-
-
-            if (PlayerTracker.Instance.playerType == PlayerType.Platformer)
-            {
-                gameObject.transform.localScale *= 0.75f;
-                overseerInsignia.windUpSpeedMultiplier *= 0.875f;
-            }
-
-            overseerInsignia.windUpSpeedMultiplier = 4f;
+            
+            overseerInsignia.windUpSpeedMultiplier = 8f;
             //overseerInsignia.windUpSpeedMultiplier *= components.EnemyIdentifier.totalSpeedModifier;
             overseerInsignia.damage = Mathf.RoundToInt(overseerInsignia.damage * Components.EnemyIdentifier.totalDamageModifier);
 
@@ -541,7 +534,7 @@ namespace HeartOfTheMachineScripts
         {
             tempGib.transform.SetPositionAndRotation(target.transform.position, Random.rotation);
             _gz.SetGoreZone(tempGib);
-            if (!OptionsMenuToManager.bloodEnabled)
+            if (!GraphicsSettings.bloodEnabled)
             {
                 tempGib.SetActive(false);
             }

@@ -238,6 +238,12 @@ namespace HeartOfTheMachineScripts
         [HarmonyPatch("ForceGetHealth"), HarmonyPrefix]
         private static bool ForceGetHealth(EnemyIdentifier __instance)
         {
+            if (__instance.TryGetComponent(out Overseer overseer))
+            {
+                __instance.health = overseer.health;
+                return false;
+            }
+            
             if (__instance.TryGetComponent(out Machine machine) && MachinePatcher.IsCustom(machine))
             {
                 __instance.health = machine.health;

@@ -6,8 +6,12 @@ using HarmonyLib;
 using HeartOfTheMachineScripts.TitanBlood;
 using UnityEngine;
 
+
+
+
 namespace HeartOfTheMachineScripts.Patch_Stuff
 {
+    
     [HarmonyPatch(typeof(ItemPlaceZone))]
     public static class ItemPlaceZonePatches
     {
@@ -35,36 +39,39 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
             {
                 var objName = itemIdentifier.gameObject.name.ToLower();
                 other.gameObject.SetActive(false);
-                
-                StaticRefs.plushiesKilled++;
 
                 if (
-                    (objName.Contains("bobot") && !StaticRefs.bobotKilled) ||
-                    (objName.Contains("dz") && !StaticRefs.dzKilled) ||
-                    (objName.Contains("bobilka") && !StaticRefs.bobilkaKilled) ||
-                    (objName.Contains("oxblood") && !StaticRefs.oxbloodKilled)
+                    (objName.Contains("bobot") && !StaticRefs.Instance.bobotKilled) ||
+                    (objName.Contains("dz") && !StaticRefs.Instance.dzKilled) ||
+                    (objName.Contains("bobilka") && !StaticRefs.Instance.bobilkaKilled) ||
+                    (objName.Contains("oxblood") && !StaticRefs.Instance.oxbloodKilled)
                 )
                 {
                     if (objName.Contains("bobot"))
-                        StaticRefs.bobotKilled = true;
+                        StaticRefs.Instance.bobotKilled = true;
                     if (objName.Contains("dz"))
-                        StaticRefs.dzKilled = true;
+                        StaticRefs.Instance.dzKilled = true;
                     if (objName.Contains("bobilka"))
-                        StaticRefs.bobilkaKilled = true;
+                        StaticRefs.Instance.bobilkaKilled = true;
                     if (objName.Contains("oxblood"))
-                        StaticRefs.oxbloodKilled = true;
+                        StaticRefs.Instance.oxbloodKilled = true;
 
-                    HudMessageReceiver.Instance.SendHudMessage("<color=red>With this character's death, the thread of prophecy is severed. Restart the level to restore the weave of fate, or persist in the doomed world you have created.</color>");
+                    Debug.Log($"\"{objName}\" died in death zone \"{__instance.gameObject.name}\"");          
+                    HudMessageReceiver.Instance.SendHudMessage("<color=red>With this character's death, the thread of prophecy is severed. Restart the level to restore the weave of fate, or persist in the doomed world you have created.</color>",
+                        "", "", 0, false, true, false);
+                    
+                    HudMessageReceiver.Instance.Invoke(nameof(HudMessageReceiver.ClearMessage), 12);
 
                 }
 
-                if (StaticRefs.bobotKilled && StaticRefs.bobilkaKilled && StaticRefs.oxbloodKilled && StaticRefs.dzKilled)
+                if (StaticRefs.Instance.bobotKilled && StaticRefs.Instance.bobilkaKilled && StaticRefs.Instance.oxbloodKilled && StaticRefs.Instance.dzKilled)
                 {
                     OptionsManager.forceRadiance = true;
                     OptionsManager.forceSand = true;
 
-                    HudMessageReceiver.Instance.SendHudMessage("ok wow i see how it is :)");
+                    HudMessageReceiver.Instance.SendHudMessage("ok wow i see how it is :)", "", "", 0, false, true, false);
 
+                    HudMessageReceiver.Instance.Invoke(nameof(HudMessageReceiver.ClearMessage), 8);
                 }
             }
         }
@@ -103,7 +110,7 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
 
                 if (codes[i].IsLdarg(0) && codes[i + 1].IsLdloc() && codes[i + 2].StoresField(AccessTools.Field(typeof(EnemySimplifier), nameof(EnemySimplifier.lastSandified))))
                 {
-                    Debug.LogWarning($"found EnemySimplifier.lastSandified at {i}");
+                    //Debug.LogWarning($"found EnemySimplifier.lastSandified at {i}");
                     insertionIndex = i;
 
                     //break;
@@ -131,7 +138,7 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
 
             for (var index = 0; index < codes.Count; index++)
             {
-                Debug.Log($"{index}: {codes[index]}");
+                //Debug.Log($"{index}: {codes[index]}");
             }
 
             return codes.AsEnumerable();
@@ -174,16 +181,11 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
 
                 if (codes[i].Calls(AccessTools.PropertyGetter(typeof(PowerUpMeter), nameof(PowerUpMeter.Instance))))
                 {
-                    Debug.LogWarning($"found PowerUpMeter.Instance at {i}");
                     returnLabel ??= codes[i + 2].operand;
-
-                    //break;
                 }
 
                 if (codes[i].LoadsField(AccessTools.Field(typeof(PowerUpMeter), nameof(PowerUpMeter.juice))))
                 {
-                    Debug.LogWarning($"found PowerUpMeter.juice at {i}");
-                    //codes[i + 3].labels.Add(returnLabel);
                     insertionIndex = i - 4;
                     break;
                 }
@@ -191,11 +193,9 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
 
             var instructionsToInsert = new List<CodeInstruction>
             {
-                //new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(Transpilers.EmitDelegate<Func<bool>>(
                     () =>
                     {
-                        Debug.Log(StaticCharge.Instance.Active);
                         return !(PowerUpMeter.Instance?.juice > 0f && StaticCharge.Instance.Active);
                     })),
                 new CodeInstruction(OpCodes.Brfalse_S, returnLabel),
@@ -205,11 +205,7 @@ namespace HeartOfTheMachineScripts.Patch_Stuff
             {
                 codes.InsertRange(insertionIndex, instructionsToInsert);
             }
-
-            for (var index = 0; index < codes.Count; index++)
-            {
-                //Debug.Log($"{index}: {codes[index]}");
-            }
+            
 
             return codes.AsEnumerable();
         }
